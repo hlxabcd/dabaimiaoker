@@ -29,7 +29,7 @@ buyPage(function(res)
 		formData[tmpFormData[key].name]=tmpFormData[key].value;
 	}
 	
-	userInfo.availableBalance = 100000;//formData.availableBalance;
+	userInfo.availableBalance = formData.availableBalance;
 	_productItemId = formData.productItemId;
 	_amountType = formData.amountType;
 	
