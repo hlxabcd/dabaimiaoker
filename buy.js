@@ -19,25 +19,28 @@ var userInfo = JSON.parse(fs.readFileSync(configFile));
 var _productItemId = 397;
 var _amountType = 1;
 
-buyPage(function(res)
-{
-	$ = cheerio.load(res);
-	var tmpFormData = $('form','.buy-box').serializeArray();
-	var formData = {};
-	for (var key in tmpFormData)
-	{
-		formData[tmpFormData[key].name]=tmpFormData[key].value;
-	}
-	
-	userInfo.availableBalance = formData.availableBalance;
-	_productItemId = formData.productItemId;
-	_amountType = formData.amountType;
-	
-	// 投标
-	buy(function(resData){
-		util.log(resData);
-	});
-});
+setTimeout(function() {
+	buyPage(function(res)
+			{
+				$ = cheerio.load(res);
+				var tmpFormData = $('form','.buy-box').serializeArray();
+				var formData = {};
+				for (var key in tmpFormData)
+				{
+					formData[tmpFormData[key].name]=tmpFormData[key].value;
+				}
+				
+				userInfo.availableBalance = formData.availableBalance;
+				_productItemId = formData.productItemId;
+				_amountType = formData.amountType;
+				
+				// 投标
+				buy(function(resData){
+					util.log(resData);
+				});
+			});
+
+}, 1000);
 
 function buy(callback) {
 	var investAmount = 0;
