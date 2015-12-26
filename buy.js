@@ -19,6 +19,7 @@ var userInfo = JSON.parse(fs.readFileSync(configFile));
 var _productItemId = 397;
 var _amountType = 1;
 
+setTimeout(function() {
 buyPage(function(res)
 {
 	$ = cheerio.load(res);
@@ -38,6 +39,7 @@ buyPage(function(res)
 		util.log(resData);
 	});
 });
+}, 1000);
 
 function buy(callback) {
 	var investAmount = 0;
@@ -58,7 +60,7 @@ function buy(callback) {
 				}
 				if(redInfos[j].limitAmount > userInfo.availableBalance - investAmount)
 				{
-					break;
+					continue;
 				}
 				else if(redInfos[j].amount == userInfo.redAmount[i])
 				{
@@ -79,7 +81,7 @@ function buy(callback) {
 			var redInfo = userInfo.redInfo[key];
 			if(redInfo.limitAmount > userInfo.availableBalance - investAmount)
 			{
-				break;
+				continue;
 			}
 			else
 			{
