@@ -16,23 +16,34 @@ var key3 = 'fglQRcv4Kxtcb4d';
 
 var userInfo = JSON.parse(fs.readFileSync(configFile));
 
-login(function() {
-	getRed(function(resData){
-			
-			var redInfo = JSON.parse(resData).pageData.result;
-			
-		    var asc = function(obj1, obj2){
-		    	var timestamp1 = Date.parse(new Date(obj1.overdueTime));
-		    	var timestamp2 = Date.parse(new Date(obj2.overdueTime));
-		        return timestamp1 - timestamp2;
-		    };
-		    // 排序好，过期早的排在上面
-		    userInfo.redInfo = redInfo.sort(asc);
-		    
-			util.log(util.inspect(userInfo));
-			fs.writeFileSync(configFile,JSON.stringify(userInfo,null,4));
-		});
+flushCookie(function(){
+	login(function() {
+		getRed(function(resData){
+				
+				var redInfo = JSON.parse(resData).pageData.result;
+				
+			    var asc = function(obj1, obj2){
+			    	var timestamp1 = Date.parse(new Date(obj1.overdueTime));
+			    	var timestamp2 = Date.parse(new Date(obj2.overdueTime));
+			        return timestamp1 - timestamp2;
+			    };
+			    // 排序好，过期早的排在上面
+			    userInfo.redInfo = redInfo.sort(asc);
+			    
+				util.log(util.inspect(userInfo));
+				fs.writeFileSync(configFile,JSON.stringify(userInfo,null,4));
+			});
+	});
 });
+
+function flushCookie(callback)
+{
+	var method = 'GET';
+	var path = '/account/getUserInfo.shtml';
+	var postData = {
+	};
+	request(method, path, postData, callback);
+}
 
 function getRed(callback)
 {
@@ -74,7 +85,6 @@ function request(method, path, postData, callback) {
 	{
 		
 	}
-
 	
 	if(userInfo.cookie != undefined)
 	{
