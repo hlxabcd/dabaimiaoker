@@ -20,26 +20,25 @@ var _productItemId = 397;
 var _amountType = 1;
 
 setTimeout(function() {
-	buyPage(function(res)
-			{
-				$ = cheerio.load(res);
-				var tmpFormData = $('form','.buy-box').serializeArray();
-				var formData = {};
-				for (var key in tmpFormData)
-				{
-					formData[tmpFormData[key].name]=tmpFormData[key].value;
-				}
-				
-				userInfo.availableBalance = formData.availableBalance;
-				_productItemId = formData.productItemId;
-				_amountType = formData.amountType;
-				
-				// 投标
-				buy(function(resData){
-					util.log(resData);
-				});
-			});
-
+buyPage(function(res)
+{
+	$ = cheerio.load(res);
+	var tmpFormData = $('form','.buy-box').serializeArray();
+	var formData = {};
+	for (var key in tmpFormData)
+	{
+		formData[tmpFormData[key].name]=tmpFormData[key].value;
+	}
+	
+	userInfo.availableBalance = formData.availableBalance;
+	_productItemId = formData.productItemId;
+	_amountType = formData.amountType;
+	
+	// 投标
+	buy(function(resData){
+		util.log(resData);
+	});
+});
 }, 1000);
 
 function buy(callback) {
@@ -61,7 +60,7 @@ function buy(callback) {
 				}
 				if(redInfos[j].limitAmount > userInfo.availableBalance - investAmount)
 				{
-					break;
+					continue;
 				}
 				else if(redInfos[j].amount == userInfo.redAmount[i])
 				{
@@ -82,7 +81,7 @@ function buy(callback) {
 			var redInfo = userInfo.redInfo[key];
 			if(redInfo.limitAmount > userInfo.availableBalance - investAmount)
 			{
-				break;
+				continue;
 			}
 			else
 			{
