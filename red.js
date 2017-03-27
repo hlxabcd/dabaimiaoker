@@ -10,28 +10,13 @@ if (process.argv.length != 3) {
 }
 var configFile = process.argv[2];
 
-var key1 = 'R6NWAk7KDBexXM7';
-var key2 = 'U8m29Ur68IydKVL';
-var key3 = 'fglQRcv4Kxtcb4d';
-
 var userInfo = JSON.parse(fs.readFileSync(configFile));
 
-flushCookie(function(){
-	login(function() {
+flushCookie(function(resData){
+	login(function(resData) {
 		getRed(function(resData){
-				
-				var redInfo = JSON.parse(resData).pageData.result;
-				
-			    var asc = function(obj1, obj2){
-			    	var timestamp1 = Date.parse(new Date(obj1.overdueTime));
-			    	var timestamp2 = Date.parse(new Date(obj2.overdueTime));
-			        return timestamp1 - timestamp2;
-			    };
-			    // 排序好，过期早的排在上面
-			    userInfo.redInfo = redInfo.sort(asc);
-			    
-				util.log(util.inspect(userInfo));
-				fs.writeFileSync(configFile,JSON.stringify(userInfo,null,4));
+				util.log("userInfo:" + util.inspect(resData));
+				util.log("resData:" + util.inspect(resData));
 			});
 	});
 });
@@ -39,7 +24,7 @@ flushCookie(function(){
 function flushCookie(callback)
 {
 	var method = 'GET';
-	var path = '/account/getUserInfo.shtml';
+	var path = '?ctl=init';
 	var postData = {
 	};
 	request(method, path, postData, callback);
@@ -48,9 +33,9 @@ function flushCookie(callback)
 function getRed(callback)
 {
 	var method = 'POST';
-	var path = '/account/getRedDataList.shtml';
+	var path = '?ctl=zaochungame1';
 	var postData = {
-		status : '0'
+		post_type : 'json'
 	};
 	request(method, path, postData, callback);
 }
@@ -58,23 +43,26 @@ function getRed(callback)
 
 function login(callback) {
 	var method = 'POST';
-	var path = '/doLogin/sureLogin.shtml?timestamp=' + new Date().getTime();
+	var path = '?ctl=login&timestamp=' + new Date().getTime();
 	var postData = {
-		loginName : userInfo.loginName,
-		password : strEnc(userInfo.password, key1, key2, key3)
+		email : userInfo.loginName,
+		pwd : userInfo.password,
+		post_type : 'json'
 	};
 	request(method, path, postData, callback);
 }
 
 function request(method, path, postData, callback) {
 	var options = {
-			hostname : 'www.dabaimoney.cn',
+			hostname : 'www.majiadai.cn',
 			port : 80,
-			path : path,
+			path : '/wap/index.php'+path,
 			method : method,
 			headers : {}
 		};
-	
+
+	options.headers['User-Agent']='Mozilla/5.0 (iPad; CPU OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1';
+
 	if(method == 'POST')
 	{
 		var postData = querystring.stringify(postData);
@@ -113,7 +101,9 @@ function request(method, path, postData, callback) {
 				
 			}
 
-			util.log('response:' + resData);
+			//util.log('userInfo:' + util.inspect(userInfo));
+
+			//util.log('response:' + resData);
 			callback(resData);
 		});
 	});
