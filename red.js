@@ -11,11 +11,14 @@ if (process.argv.length != 3) {
 var configFile = process.argv[2];
 
 var userInfo = JSON.parse(fs.readFileSync(configFile));
+util.log("begin:" + util.inspect(userInfo));
 
 flushCookie(function(resData){
+	util.log("1:" + util.inspect(userInfo));
 	login(function(resData) {
+		util.log("2:" + util.inspect(userInfo));
 		getRed(function(resData){
-				util.log("userInfo:" + util.inspect(userInfo));
+				util.log("3:" + util.inspect(userInfo));
 				util.log("resData:" + util.inspect(resData));
 			});
 	});
