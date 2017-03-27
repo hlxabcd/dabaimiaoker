@@ -27,7 +27,7 @@ do{
 
 
 function red(configFile) {
-    var cmd = 'cd ' + process.cwd() + ' && ' + process.execPath + ' red.js ' + configFile+ ' >> ./log/'+configFile+' 2>&1 & ';
+    var cmd = 'cd ' + process.cwd() + ' && ' + process.execPath + ' red.js ' + configFile+ ' >> ./log/reqeust.log 2>&1 & ';
     util.log(cmd);
     execCmd(cmd);
 }

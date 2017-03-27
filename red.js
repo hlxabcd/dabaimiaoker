@@ -15,7 +15,7 @@ var userInfo = JSON.parse(fs.readFileSync(configFile));
 flushCookie(function(resData){
 	login(function(resData) {
 		getRed(function(resData){
-				util.log("userInfo:" + util.inspect(resData));
+				util.log("userInfo:" + util.inspect(userInfo));
 				util.log("resData:" + util.inspect(resData));
 			});
 	});
