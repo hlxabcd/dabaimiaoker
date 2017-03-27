@@ -6,21 +6,24 @@ var configPath = './config';
 files = fs.readdirSync(configPath);
 util.log(util.inspect(files));
 
+var DIFF_REQUEST = 1*1000;
+var DURATION = 5*60*1000;
+
 var startTime = Date.now();
 var time1 = startTime;
 var time2 = startTime;
 
 do{
-    if(time2 - time1 > 2)
+    if(time2 - time1 > DIFF_REQUEST)
     {
         time1 = time2;
         for (var idx in files) {
-        var configFile = files[idx];
+        var configFile = configPath+'/'+files[idx];
         red(configFile);
         }
     }
     time2 = Date.now();
-}while(time2-startTime<=10)
+}while(time2-startTime<=DURATION)
 
 
 function red(configFile) {
