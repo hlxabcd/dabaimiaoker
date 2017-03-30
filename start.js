@@ -6,12 +6,18 @@ var configPath = './config';
 files = fs.readdirSync(configPath);
 util.log(util.inspect(files));
 
-var DIFF_REQUEST = 1*1000;
-var DURATION = 5*60*1000;
+var DIFF_REQUEST = 2*1000;
+var DURATION = 1*60*1000;
 
 var startTime = Date.now();
 var time1 = startTime;
 var time2 = startTime;
+
+if(files.length == 0)
+{
+	console.log('no config files');
+	process.exit();
+}
 
 do{
     if(time2 - time1 > DIFF_REQUEST)
