@@ -1,6 +1,6 @@
 var strEnc = require('./modules/des').strEnc;
 var querystring = require('querystring');
-var http = require('http');
+var https = require('https');
 var util = require('util');
 var fs= require('fs');
 
@@ -58,7 +58,7 @@ function login(callback) {
 function request(method, path, postData, callback) {
 	var options = {
 			hostname : 'www.majiadai.cn',
-			port : 80,
+			rejectUnauthorized: false,
 			path : '/wap/index.php'+path,
 			method : method,
 			headers : {}
@@ -83,7 +83,7 @@ function request(method, path, postData, callback) {
 	}
 	//console.log('reuqest header:' + util.inspect(options.headers));
 
-	var req = http.request(options, function(res) {
+	var req = https.request(options, function(res) {
 		//console.log('STATUS: ' + res.statusCode);
 		//console.log('HEADERS: ' + JSON.stringify(res.headers));
 
@@ -112,7 +112,7 @@ function request(method, path, postData, callback) {
 	});
 
 	req.on('error', function(e) {
-		//console.log('problem with request: ' + e.message);
+		console.log('problem with request: ' + e.message);
 	});
 	if(method == 'POST')
 	{
